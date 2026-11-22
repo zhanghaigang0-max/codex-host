@@ -1,0 +1,40 @@
+# GitHub Actions 第一件活：每天自动记一笔英伟达 + QQQ 收盘价
+# 放进仓库 zhanghaigang0-max/codex-host 的 .github/workflows/daily-market-log.yml
+# 不用密钥、不用他自己的电脑、不用 n8n；免费账号额度完全够用。
+# 定时：每周一到周五 23:00 UTC = 周二到周六 07:00 北京时间，美股收盘后跑。
+# 数据源：Stooq 免费公开行情（nvda.us / qqq.us），不用注册、不用 Key。
+# 第一次跑就是测试：点 Actions -> 本工作流 -> Run workflow，绿了就是成了；
+# 要是 Stooq 那边不让 GitHub 的机器抓，日志里会报错，文件不动，不花钱、没损失。
+name: 每日收盘价记录
+
+on:
+  schedule:
+    - cron: '0 23 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  log:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 抓取收盘价并记入文件
+        run: |
+          set -e
+          curl -fsSL "https://stooq.com/q/d/l/?s=nvda.us&i=d" -o nvda.csv
+          curl -fsSL "https://stooq.com/q/d/l/?s=qqq.us&i=d" -o qqq.csv
+          {
+            echo "## $(date -u +%Y-%m-%d)"
+            echo "- NVDA: $(tail -n 1 nvda.csv)"
+            echo "- QQQ: $(tail -n 1 qqq.csv)"
+            echo ""
+          } >> market-log.md
+      - name: 提交回仓库
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add market-log.md
+          git diff --cached --quiet || git commit -m "每日收盘价记录 $(date -u +%Y-%m-%d)"
+          git push
