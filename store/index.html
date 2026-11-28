@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>海港好物 · 跨境样品站</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif; background: #f7f5f0; color: #333; line-height: 1.6; }
+  .wrap { max-width: 480px; margin: 0 auto; background: #fff; min-height: 100vh; }
+  .sample-bar { background: #e67e22; color: #fff; text-align: center; font-size: 13px; padding: 8px; }
+  header { padding: 28px 20px 20px; text-align: center; background: linear-gradient(135deg, #2e7d6b, #3a9d84); color: #fff; }
+  header h1 { font-size: 24px; margin-bottom: 6px; }
+  header p { font-size: 14px; opacity: .9; }
+  nav { display: flex; border-bottom: 1px solid #eee; position: sticky; top: 0; background: #fff; z-index: 10; }
+  nav button { flex: 1; padding: 12px 0; border: none; background: #fff; font-size: 15px; cursor: pointer; color: #666; border-bottom: 2px solid transparent; }
+  nav button.active { color: #2e7d6b; border-bottom-color: #2e7d6b; font-weight: bold; }
+  section { padding: 16px; }
+  h2 { font-size: 18px; margin: 8px 0 12px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .card { border: 1px solid #eee; border-radius: 10px; overflow: hidden; cursor: pointer; background: #fff; }
+  .thumb { height: 120px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: bold; color: #fff; text-align: center; padding: 8px; }
+  .c1 { background: #5b8dbf; } .c2 { background: #7fb069; } .c3 { background: #e0a458; }
+  .c4 { background: #9b7ede; } .c5 { background: #d96c6c; } .c6 { background: #4db6ac; }
+  .c7 { background: #f08a5d; } .c8 { background: #6d9dc5; } .c9 { background: #a3b18a; } .c10 { background: #c08497; }
+  .info { padding: 10px; }
+  .info h3 { font-size: 14px; margin-bottom: 4px; }
+  .info p { font-size: 12px; color: #888; }
+  .price { color: #e67e22; font-weight: bold; font-size: 15px; margin-top: 6px; }
+  .price small { color: #999; font-size: 11px; font-weight: normal; }
+  #detail { display: none; border: 1px solid #2e7d6b; border-radius: 10px; padding: 16px; margin-top: 16px; background: #f2faf7; }
+  #detail h3 { font-size: 17px; margin-bottom: 6px; }
+  #detail p { font-size: 14px; margin-bottom: 6px; }
+  #detail .buy { display: inline-block; margin-top: 8px; background: #2e7d6b; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-size: 15px; cursor: pointer; }
+  form { display: flex; flex-direction: column; gap: 10px; }
+  label { font-size: 14px; }
+  input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
+  .submit { background: #e67e22; color: #fff; border: none; padding: 13px; border-radius: 8px; font-size: 16px; cursor: pointer; }
+  #orderMsg { display: none; background: #fef6e7; border: 1px solid #e67e22; border-radius: 8px; padding: 14px; font-size: 14px; margin-top: 12px; }
+  .note { font-size: 13px; color: #666; background: #f7f5f0; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+  footer { padding: 20px; font-size: 13px; color: #999; text-align: center; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="sample-bar">样品站 · 仅供展示 · 未接入真实支付 · 商品、价格均为样品占位</div>
+  <header>
+    <h1>海港好物</h1>
+    <p>家居收纳 · 厨房日用小件｜台湾练手首站 · 一件代发测品</p>
+  </header>
+  <nav>
+    <button class="active" onclick="showCat('home', this)">家居收纳</button>
+    <button onclick="showCat('kitchen', this)">厨房日用小件</button>
+    <button onclick="showCat('order', this)">下单</button>
+  </nav>
+
+  <section id="cat-home">
+    <h2>家居收纳（样品）</h2>
+    <div class="grid">
+      <div class="card" onclick="showDetail('抽屜分隔收納盒','NT$129','样品价，仅供参考','可自由组合，适配常见抽屉尺寸，加厚塑料。','PP 塑料｜约 32×12×8 cm｜样品占位，未真实在售')">
+        <div class="thumb c1">抽屉分隔盒</div>
+        <div class="info"><h3>抽屜分隔收納盒</h3><p>可自由组合 · 衣柜抽屉整理</p><div class="price">NT$129 <small>样品价</small></div></div>
+      </div>
+      <div class="card" onclick="showDetail('可疊加收納盒','NT$159','样品价，仅供参考','透明附盖，叠加稳固，衣物玩具整理。','PP 塑料｜约 40×30×20 cm｜样品占位，未真实在售')">
+        <div class="thumb c2">可叠加收纳盒</div>
+        <div class="info"><h3>可疊加收納盒</h3><p>透明附盖 · 衣物玩具整理箱</p><div class="price">NT$159 <small>样品价</small></div></div>
+      </div>
+      <div class="card" onclick="showDetail('衣櫃分層隔板','NT$199','样品价，仅供参考','免工具安装，伸缩适配不同衣柜宽度。','ABS｜伸缩 30–50 cm｜样品占位，未真实在售')">
+        <div class="thumb c3">衣柜分层隔板</div>
+        <div class="info"><h3>衣櫃分層隔板</h3><p>免工具 · 衣柜收纳层板</p><div class="price">NT$199 <small>样品价</small></div></div>
+      </div>
+      <div class="card" onclick="showDetail('免打孔掛鉤','NT$89','样品价，仅供参考','强力黏贴，不留胶，厨房浴室通用。','ABS + 无痕胶｜承重约 3 kg｜样品占位，未真实在售')">
+        <div class="thumb c4">免打孔挂钩</div>
+        <div class="info"><h3>免打孔掛鉤</h3><p>强力黏贴 · 厨房浴室通用</p><div class="price">NT$89 <small>样品价</small></div></div>
+      </div>
+      <div class="card" onclick="showDetail('浴室置物架','NT$179','样品价，仅供参考','免打孔壁挂，防水防锈，洗漱收纳。','铝合金 + ABS｜约 35×15×8 cm｜样品占位，未真实在售')">
+        <div class="thumb c5">浴室置物架</div>
+        <div class="info"><h3>浴室置物架</h3><p>免打孔 · 转角/壁挂 洗漱收纳</p><div class="price">NT$179 <small>样品价</small></div></div>
+      </div>
+    </div>
+    <div id="detail">
+      <h3 id="dName"></h3>
+      <p id="dPrice"></p>
+      <p id="dDesc"></p>
+      <p id="dSpec" style="color:#888;font-size:13px"></p>
+      <button class="buy" onclick="goOrder()">去下单（样品）</button>
+    </div>
+  </section>
+
+  <section id="cat-kitchen" style="display:none">
+    <h2>厨房日用小件（样品）</h2>
+    <div class="grid">
+      <div class="card" onclick="showDetail('廚房置物架','NT$249','样品价，仅供参考','多层台面/水槽收纳，防锈，组装简单。','碳钢 + 防锈涂层｜约 45×25×35 cm｜样品占位，未真实在售')">
+        <div class="thumb c6">厨房置物架</div>
+        <div class="info"><h3>廚房置物架</h3><p>多层 · 台面/水槽收纳架</p><div class="price">NT$249 <small>样品价</small></div></div>
+      </div>
+      <div class="card" onclick="showDetail('調料收納盒','NT$139','样品价，仅供参考','密封防潮，出料口设计，调味罐组。','食品级 PP｜约 15×10×10 cm｜样品占位，未真实在售')">
+        <div class="thumb c7">调料收纳盒</div>
+        <div class="info"><h3>調料收納盒</h3><p>密封防潮 · 厨房调味罐组</p><div class="price">NT$139 <small>样品价</small></div></div>
+      </div>
+      <div class="card" onclick="showDetail('密封罐組（3件）','NT$169','样品价，仅供参考','食品级轻塑料，轻量，厨房储物。','食品级 PP｜3 件装｜样品占位，未真实在售')">
+        <div class="thumb c8">密封罐组</div>
+        <div class="info"><h3>密封罐組（3件）</h3><p>食品级塑料 · 轻量 厨房储物罐</p><div class="price">NT$169 <small>样品价</small></div></div>
+      </div>
+      <div class="card" onclick="showDetail('桌面數據線收納盒','NT$119','样品价，仅供参考','线孔设计，盖子不压线，办公桌收纳。','ABS｜约 25×12×10 cm｜样品占位，未真实在售')">
+        <div class="thumb c9">数据线收纳盒</div>
+        <div class="info"><h3>桌面數據線收納盒</h3><p>线孔设计 · 办公桌收纳</p><div class="price">NT$119 <small>样品价</small></div></div>
+      </div>
+      <div class="card" onclick="showDetail('水槽瀝水架','NT$149','样品价，仅供参考','伸缩适配水槽，碗碟沥水，防锈。','不锈钢 + 硅胶防滑｜伸缩 35–50 cm｜样品占位，未真实在售')">
+        <div class="thumb c10">水槽沥水架</div>
+        <div class="info"><h3>水槽瀝水架</h3><p>伸缩适配 · 碗碟沥水</p><div class="price">NT$149 <small>样品价</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cat-order" style="display:none">
+    <h2>下单（样品表单）</h2>
+    <div class="note">这是样品站的演示表单：提交后只在当前页面提示，不会扣款、不会真的发货，也没有接任何支付。真实商品、价格、图片到位后才会替换成真店。</div>
+    <form onsubmit="submitOrder(event)">
+      <label>姓名<input required placeholder="请填写姓名"></label>
+      <label>电话<input required placeholder="请填写电话"></label>
+      <label>地址<textarea rows="2" required placeholder="请填写收货地址"></textarea></label>
+      <label>商品
+        <select id="orderProduct">
+          <option>抽屜分隔收納盒 NT$129</option>
+          <option>可疊加收納盒 NT$159</option>
+          <option>衣櫃分層隔板 NT$199</option>
+          <option>免打孔掛鉤 NT$89</option>
+          <option>浴室置物架 NT$179</option>
+          <option>廚房置物架 NT$249</option>
+          <option>調料收納盒 NT$139</option>
+          <option>密封罐組（3件） NT$169</option>
+          <option>桌面數據線收納盒 NT$119</option>
+          <option>水槽瀝水架 NT$149</option>
+        </select>
+      </label>
+      <label>数量<input type="number" min="1" value="1" required></label>
+      <button class="submit" type="submit">提交订单（样品）</button>
+    </form>
+    <div id="orderMsg">已收到您的样品订单（演示）。本站为样品站，未接入真实支付，不会扣款也不会发货，谢谢！</div>
+    <h2 style="margin-top:20px">发货与退货说明</h2>
+    <div class="note">发货：台湾为练手首站，一件代发测品；商品从国内发出，发货时效与物流方式以店铺后台为准，本站不承诺具体到货时间。<br>退货：收到商品 7 天内如有质量问题可联系客服处理，运费与处理方式以下单时客服确认为准。<br>联系方式：邮箱占位（待填）、微信占位（待填）。</div>
+  </section>
+
+  <footer>海港好物 · 跨境样品站｜本站所有商品、价格、图片均为样品占位，未真实在售。</footer>
+</div>
+<script>
+function showCat(id, btn) {
+  ['cat-home','cat-kitchen','cat-order'].forEach(function(x){ document.getElementById(x).style.display = (x === 'cat-' + id) ? 'block' : 'none'; });
+  document.querySelectorAll('nav button').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+function showDetail(name, price, tag, desc, spec) {
+  document.getElementById('dName').textContent = name;
+  document.getElementById('dPrice').textContent = price + '（' + tag + '）';
+  document.getElementById('dDesc').textContent = desc;
+  document.getElementById('dSpec').textContent = spec;
+  document.getElementById('detail').style.display = 'block';
+  document.getElementById('detail').scrollIntoView({behavior: 'smooth'});
+}
+function goOrder() {
+  document.querySelectorAll('nav button')[2].click();
+}
+function submitOrder(e) {
+  e.preventDefault();
+  document.getElementById('orderMsg').style.display = 'block';
+}
+</script>
+</body>
+</html>
