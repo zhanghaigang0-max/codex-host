@@ -6,9 +6,8 @@ import csv
 import json
 import math
 import statistics
-import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -57,10 +56,11 @@ def rsi(values: list[float], period: int = 14) -> float | None:
 def analyze(asset: dict) -> dict:
     closes, as_of = get_closes(asset)
     price = closes[-1]
-    ma20, ma50, momentum = sma(closes, 20), sma(closes, 50), sma(closes, 20)
+    ma20, ma50 = sma(closes, 20), sma(closes, 50)
     strength = rsi(closes)
     returns = [(closes[i] / closes[i - 1]) - 1 for i in range(max(1, len(closes) - 20), len(closes))]
-    volatility = statistics.pstdev(returns) * math.sqrt(252) if len(returns) > 1 else None
+    annualization_days = 252 if asset['kind'] == 'stock' else 365
+    volatility = statistics.pstdev(returns) * math.sqrt(annualization_days) if len(returns) > 1 else None
     if ma50 is not None and price > ma20 > ma50 and strength is not None and strength < 70:
         signal, trend = "偏多", "价格位于20日均线上方，且20日均线高于50日均线"
     elif ma50 is not None and price < ma20 < ma50 and strength is not None and strength > 30:
@@ -82,6 +82,7 @@ def main():
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     now = datetime.now(timezone.utc)
+    beijing_now = now.astimezone(timezone(timedelta(hours=8)))
     results, errors = [], []
     for asset in ASSETS:
         try:
@@ -93,7 +94,7 @@ def main():
     lines = [
         "# AI 金融决策中心｜每日市场观察",
         "",
-        f"- 生成时间：{now.strftime('%Y-%m-%d %H:%M UTC')}（北京时间约 {now.strftime('%Y-%m-%d')} + 8 小时）",
+        f"- 生成时间：{now.strftime('%Y-%m-%d %H:%M UTC')}（北京时间 {beijing_now.strftime('%Y-%m-%d %H:%M')}）",
         "- 当前版本：行情采集 + 规则指标分析（尚未接入生成式 AI，不把规则信号称为 AI 判断）",
         "- 覆盖资产：NVDA、QQQ、BTC、ETH",
         "",
@@ -112,7 +113,7 @@ def main():
     lines += ["", "## 观察说明", ""]
     for item in results:
         lines.append(f"- **{item['symbol']}**：{item['trend_note']}。收盘/最新日线值 {item['close']}；数据日期 {item['as_of']}。")
-    lines += ["", "* 年化波动率根据最近约20个日收益率估算；股票和加密货币的交易日制度不同，跨资产比较需谨慎。", "", "## 下一步升级", "", "1. 加入新闻与宏观事件来源，并标注出处和时间。", "2. 接入多个 AI 分别分析，汇总分歧与置信度。", "3. 用历史数据回测规则，记录准确率、最大回撤和误报。", "4. 经用户明确授权后再考虑模拟盘；真实交易默认关闭。", ""]
+    lines += ["", "* 年化波动率根据最近约20个日收益率估算；股票按252个交易日、加密货币按365天年化，跨资产比较仍需谨慎。", "", "## 下一步升级", "", "1. 加入新闻与宏观事件来源，并标注出处和时间。", "2. 接入多个 AI 分别分析，汇总分歧与置信度。", "3. 用历史数据回测规则，记录准确率、最大回撤和误报。", "4. 经用户明确授权后再考虑模拟盘；真实交易默认关闭。", ""]
     (REPORT_DIR / "latest.md").write_text("\n".join(lines), encoding="utf-8")
     history = DATA_DIR / "history.jsonl"
     with history.open("a", encoding="utf-8") as handle:
