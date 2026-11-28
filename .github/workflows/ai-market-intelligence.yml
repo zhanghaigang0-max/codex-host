@@ -1,0 +1,34 @@
+name: AI 金融决策中心 - 每日市场分析
+
+on:
+  schedule:
+    - cron: "20 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-market-intelligence
+  cancel-in-progress: false
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate market report
+        run: python scripts/market_analyzer.py
+      - name: Commit reports and history
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/latest.md data/latest.json data/history.jsonl
+          git diff --cached --quiet || git commit -m "更新每日市场分析报告 $(date -u +%Y-%m-%d)"
+          git push
